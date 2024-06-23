@@ -61,3 +61,50 @@ def persist_html_content_dynamic(url, file_name='page.html', wait_time=30):
 # Usage example:
 #url = 'https://www.psacard.com/priceguide/non-sports-tcg-card-values/7'
 #persist_html_content_dynamic(url, 'page.html')
+
+
+##############################################2#######################################################################################
+
+import json
+from bs4 import BeautifulSoup
+
+def extract_sets_links(html_file_path, json_file_path='sets_links.json'):
+    """
+    Extracts all Pokémon card set links from a given HTML file and saves them to a JSON file.
+
+    Args:
+        html_file_path (str): Path to the HTML file.
+        json_file_path (str): Path to the output JSON file. Default is 'sets_links.json'.
+
+    Returns:
+        None
+    """
+    # Read the HTML content from the file
+    with open(html_file_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+
+    # Parse the HTML content with BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Extract links related to Pokémon card sets
+    pokemon_links = []
+    for a_tag in soup.find_all('a', href=True):
+        if 'poke-mon' in a_tag['href']:
+            # Construct full URL if needed, assuming the base URL is 'https://www.psacard.com'
+            full_url = 'https://www.psacard.com' + a_tag['href']
+            pokemon_links.append(full_url)
+
+    # Save the links to a JSON file
+    with open(json_file_path, 'w', encoding='utf-8') as json_file:
+        json.dump(pokemon_links, json_file, indent=4)
+
+    print(f"Pokémon links extracted and saved to {json_file_path}.")
+
+# Usage example:
+#html_file_path = 'sets_list_page.html'  # Path to the downloaded HTML file
+#extract_sets_links(html_file_path, 'sets_links.json')
+
+
+
+
+#########################################################3#######################################################################
